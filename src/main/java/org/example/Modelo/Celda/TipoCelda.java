@@ -1,0 +1,13 @@
+package org.example.Modelo.Celda;
+
+public enum TipoCelda {
+    TORRE,
+    BASE,
+    VACIO,
+    CAMINO_HORIZONTAL,
+    CAMINO_VERTICAL,
+    CURVA_ABAJO_DERECHA,
+    CURVA_ABAJO_IZQUIERDA,
+    CURVA_ARRIBA_DERECHA,
+    CURVA_ARRIBA_IZQUIERDA
+}
