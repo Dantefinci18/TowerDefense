@@ -1,11 +1,14 @@
-package org.example;
+package org.example.Vistas;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import org.example.Repositorios.ImagenRotada;
 import org.example.Modelo.Arma.Arma;
 import org.example.Modelo.Celda.Celda;
 import org.example.Modelo.Celda.TipoCelda;
 import org.example.Modelo.Celda.Torre;
+import org.example.Repositorios.RepositorioDeArmas;
+import org.example.Repositorios.RepositorioDeCeldas;
 
 public class VistaMapa {
     private final Celda[][] mapa;

@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Vistas;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.Background;
@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
 import java.util.Objects;
 
 public class VistaInicio {

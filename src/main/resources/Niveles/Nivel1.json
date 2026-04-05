@@ -6,33 +6,29 @@
     ["H", "H", "ARI", "O", "V", "O", "V"],
     ["O", "O", "O", "O", "ARD", "H", "ARI"]
   ],
-  "spawn": {"x": 3,"y": 0},
+  "spawn": {"fila": 3,"columna": 0},
     "camino": [
-      { "x": 3, "y": 0 },
-      { "x": 3, "y": 1 },
-      { "x": 3, "y": 2 },
-      { "x": 2, "y": 2 },
-      { "x": 1, "y": 2 },
-      { "x": 0, "y": 2 },
-      { "x": 0, "y": 3 },
-      { "x": 0, "y": 4 },
-      { "x": 1, "y": 4 },
-      { "x": 2, "y": 4 },
-      { "x": 3, "y": 4 },
-      { "x": 4, "y": 4 },
-      { "x": 4, "y": 5 },
-      { "x": 4, "y": 6 },
-      { "x": 3, "y": 6 },
-      { "x": 2, "y": 6 },
-      { "x": 1, "y": 6 },
-      { "x": 0, "y": 6 }
+      { "fila": 3, "columna": 0 },
+      { "fila": 3, "columna": 1 },
+      { "fila": 3, "columna": 2 },
+      { "fila": 2, "columna": 2 },
+      { "fila": 1, "columna": 2 },
+      { "fila": 0, "columna": 2 },
+      { "fila": 0, "columna": 3 },
+      { "fila": 0, "columna": 4 },
+      { "fila": 1, "columna": 4 },
+      { "fila": 2, "columna": 4 },
+      { "fila": 3, "columna": 4 },
+      { "fila": 4, "columna": 4 },
+      { "fila": 4, "columna": 5 },
+      { "fila": 4, "columna": 6 },
+      { "fila": 3, "columna": 6 },
+      { "fila": 2, "columna": 6 },
+      { "fila": 1, "columna": 6 },
+      { "fila": 0, "columna": 6 }
     ],
   "oleadas": [
-    {
-      "enemigos": ["TANQUE", "TANQUE", "BUNKER"]
-    },
-    {
-      "enemigos": ["TANQUE", "BUNKER", "BUNKER","AVION","BUNKER"]
-    }
-  ]
+    ["TANQUE", "TANQUE", "BUNKER"],
+    ["TANQUE", "BUNKER", "BUNKER","AVION","BUNKER"]
+    ]
 }

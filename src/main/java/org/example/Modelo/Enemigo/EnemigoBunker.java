@@ -5,7 +5,7 @@ import org.example.Modelo.Posicion;
 import java.util.ArrayList;
 
 public class EnemigoBunker extends EnemigoDeTierra {
-    public EnemigoBunker(int x, int y, ArrayList<Posicion> recorrido){
+    public EnemigoBunker(double x, double y, ArrayList<Posicion> recorrido){
         super(x,y,200,20,recorrido);
     }
 

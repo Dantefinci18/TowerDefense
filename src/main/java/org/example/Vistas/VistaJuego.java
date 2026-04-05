@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Vistas;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
@@ -17,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
+import org.example.Repositorios.RepositorioDeArmas;
 
 
 public class VistaJuego {
@@ -137,5 +138,6 @@ public class VistaJuego {
         int monedas = this.juego.grtDinero();
         this.labelDinero.setText("Monedas: " + monedas);
         this.escenario.render();
+        this.juego.actualizar();
     }
 }

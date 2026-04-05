@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Repositorios;
 
 import org.example.Modelo.Arma.TipoArma;
 

@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Repositorios;
 import javafx.scene.image.Image;
 
 public class ImagenRotada {

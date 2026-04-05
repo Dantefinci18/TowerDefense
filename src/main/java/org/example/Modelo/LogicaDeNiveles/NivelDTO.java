@@ -1,10 +1,17 @@
 package org.example.Modelo.LogicaDeNiveles;
 
 
+import org.example.Modelo.Enemigo.TipoEnemigo;
+import org.example.Modelo.Posicion;
+
 class NivelDTO {
     private TipoCeldaDTO[][] mapa;
-    private OleadaDTO[] oleadas;
+    private TipoEnemigo[][] oleadas;
+    private Posicion spawn;
+    private Posicion[] camino;
 
     public TipoCeldaDTO[][] getMapa() { return this.mapa; }
-    public OleadaDTO[] getOleadas() { return this.oleadas; }
+    public Posicion getPosicionSpawn() {return this.spawn;}
+    public TipoEnemigo[][] getOleadas() { return this.oleadas; }
+    public Posicion[] getCamino(){return this.camino;}
 }
