@@ -8,13 +8,14 @@ import org.example.Repositorios.ImagenRotada;
 import org.example.Repositorios.RepositorioDeEnemigos;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class VistaEnemigos {
-    private final ArrayList<Enemigo> enemigos;
+    private final HashSet<Enemigo> enemigos;
     private final RepositorioDeEnemigos repositorioDeEnemigos;
     private static final int TAMANIO_CELDA = 96;
 
-    public VistaEnemigos(ArrayList<Enemigo> enemigos){
+    public VistaEnemigos(HashSet<Enemigo> enemigos){
         this.enemigos = enemigos;
         this.repositorioDeEnemigos = new RepositorioDeEnemigos();
     }

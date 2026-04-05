@@ -65,7 +65,7 @@ public class NivelLoader {
         TipoEnemigo[][] oleadasDto = this.nivelDto.getOleadas();
 
         for( TipoEnemigo[] oleadaDTO : oleadasDto) {
-            oleadas.offer(new ArrayDeque<TipoEnemigo>(Arrays.asList(oleadaDTO)));
+            oleadas.offer(new ArrayDeque<>(Arrays.asList(oleadaDTO)));
         }
 
         return oleadas;

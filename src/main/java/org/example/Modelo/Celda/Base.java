@@ -11,5 +11,10 @@ public class Base extends Celda{
     public void recibirDanio(int danio){
         this.vida = this.vida-danio;
     }
+
+    public int getVida() {
+        return vida;
+    }
+
     public boolean estaDestruida() {return this.vida <= 0;}
 }

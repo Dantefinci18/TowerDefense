@@ -11,15 +11,13 @@ import org.example.Modelo.Celda.Torre;
 import org.example.Modelo.Enemigo.*;
 import org.example.Modelo.LogicaDeNiveles.NivelLoader;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 public class TowerDefense {
     private Posicion posicionBase;
     private Posicion posicionSpawn;
     private ArrayList<Posicion> camino;
-    private ArrayList<Enemigo> enemigosVisibles;
+    private HashSet<Enemigo> enemigosVisibles;
     private ArrayDeque<TipoEnemigo> oleadaActual;
     private ArrayDeque<ArrayDeque<TipoEnemigo>> oleadas;
     private final Celda[][] mapa;
@@ -37,7 +35,7 @@ public class TowerDefense {
         this.mapa = loader.getMapa();
         this.posicionSpawn = loader.getPosicionSpawn();
         this.posicionBase = loader.getPosicionBase();
-        this.enemigosVisibles = new ArrayList<>();
+        this.enemigosVisibles = new HashSet<>();
         this.oleadas = loader.getOleadas();
         this.oleadaActual = this.oleadas.poll();
         this.camino =new ArrayList<>(Arrays.asList(loader.getCamino()));
@@ -92,26 +90,39 @@ public class TowerDefense {
         if(this.tiempoDespuesDelSpawn >= TIEMPO_SPAWN_MS){
             this.tiempoDespuesDelSpawn = 0;
 
-            if(this.oleadaActual == null){
-                this.victoria = true;
-            } else if(this.oleadaActual.isEmpty()) {
-                this.oleadaActual = this.oleadas.poll();
-            } else {
+            if(this.oleadaActual != null && !oleadaActual.isEmpty()){
                 TipoEnemigo tipo = this.oleadaActual.poll();
                 int fila = this.posicionSpawn.getFila();
                 int columna = this.posicionSpawn.getColumna();
                 Enemigo enemigo = this.obtenerEnemigoSegunTipo(tipo,fila,columna);
                 this.enemigosVisibles.add(enemigo);
+
+            } else {
+                this.oleadaActual = this.oleadas.poll();
+
+                if(this.oleadaActual == null){
+                    this.victoria = true;
+                }
             }
         }
+
         this.tiempoDespuesDelSpawn += MS_PER_FRAME;
 
-        for(var enemigo: this.enemigosVisibles){
+        Iterator<Enemigo> it = this.enemigosVisibles.iterator();
+
+        while (it.hasNext()) {
+            Enemigo enemigo = it.next();
             enemigo.avanzar();
+
+            if (enemigo.llegoALaBase()) {
+                Base base = (Base) this.mapa[this.posicionBase.getFila()][this.posicionBase.getColumna()];
+                base.recibirDanio(enemigo.getDanio());
+                it.remove();
+            }
         }
     }
 
-    public ArrayList<Enemigo> obtenerEnemigos(){ return this.enemigosVisibles;}
+    public HashSet<Enemigo> obtenerEnemigos(){ return this.enemigosVisibles;}
 
     public boolean hayVictoria(){
         return this.victoria;

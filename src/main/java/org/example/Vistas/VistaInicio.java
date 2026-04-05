@@ -48,5 +48,9 @@ public class VistaInicio {
         this.stage.setTitle("Tower Defense");
         this.stage.setScene(scene);
         this.stage.show();
+
+        this.stage.setOnCloseRequest(e -> {
+            javafx.application.Platform.exit();
+        });
     }
 }

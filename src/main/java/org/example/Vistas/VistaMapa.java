@@ -2,6 +2,8 @@ package org.example.Vistas;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import org.example.Modelo.Celda.Base;
 import org.example.Repositorios.ImagenRotada;
 import org.example.Modelo.Arma.Arma;
 import org.example.Modelo.Celda.Celda;
@@ -27,8 +29,8 @@ public class VistaMapa {
             for(int j = 0; j < mapa[0].length; j++){
                 Celda celda = mapa[i][j];
                 ImagenRotada imagen = this.repositorioDeCeldas.obtenerImagenCelda(celda.getTipo());
-                int x = j*TAMANIO_CELDA;
-                int y = i*TAMANIO_CELDA;
+                double x = j*TAMANIO_CELDA;
+                double y = i*TAMANIO_CELDA;
 
                 if (imagen.getRotacion() == 0) {
                     gc.drawImage(imagen.getImagen(), x, y, TAMANIO_CELDA, TAMANIO_CELDA);
@@ -52,14 +54,37 @@ public class VistaMapa {
                     mostrarArma(gc,torre.getArma(),x,y);
                 }
 
+                if(celda.getTipo() == TipoCelda.BASE){
+                    Base base = (Base) celda;
+                    int vida = base.getVida();
+                    double centrox = x + TAMANIO_CELDA/2.0;
+                    this.dibujarVidaBase(gc,centrox,y,vida);
+                }
+
             }
         }
     }
 
-    private void mostrarArma(GraphicsContext gc, Arma arma, int x, int y){
+    private void mostrarArma(GraphicsContext gc, Arma arma, double x, double y){
         if(arma !=null){
             Image imagen = this.repositorioDeArmas.obtenerImagenArma(arma.getTipo(), arma.getNivel());
             gc.drawImage(imagen, x, y, TAMANIO_CELDA, TAMANIO_CELDA);
         }
+    }
+
+    private void dibujarVidaBase(GraphicsContext gc, double x, double y, int vida) {
+
+        final double VIDA_MAXIMA = 80;
+        final double ANCHO_BARRA = 40;
+        final double ALTO_BARRA = 6;
+
+        double porcentaje = vida / VIDA_MAXIMA ;
+
+
+        gc.setFill(Color.BLACK);
+        gc.fillRect(x-ANCHO_BARRA/2.0, y, ANCHO_BARRA, ALTO_BARRA);
+
+        gc.setFill(Color.WHITE);
+        gc.fillRect(x-ANCHO_BARRA/2.0, y, ANCHO_BARRA* porcentaje , ALTO_BARRA);
     }
 }

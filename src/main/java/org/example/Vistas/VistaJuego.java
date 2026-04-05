@@ -1,6 +1,7 @@
 package org.example.Vistas;
 
 import javafx.animation.AnimationTimer;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BackgroundFill;
@@ -85,6 +86,16 @@ public class VistaJuego {
 
             @Override
             public void handle(long now) {
+                if(juego.hayDerrota()){
+                    stop();
+                    ventanaDeFinalizacion("Game Over!");
+                }
+
+                if(juego.hayVictoria()){
+                    stop();
+                    ventanaDeFinalizacion("Victoria!");
+                }
+
                 if (last == 0) {
                     last = now;
                 }
@@ -106,6 +117,11 @@ public class VistaJuego {
         this.stage.setScene(scene);
         this.stage.setResizable(false);
         this.stage.show();
+
+        this.stage.setOnCloseRequest(e -> {
+            e.consume();
+            this.volverAInicio();
+        });
     }
 
     private Button crearBotonConImagenArma(Arma arma) {
@@ -140,4 +156,36 @@ public class VistaJuego {
         this.escenario.render();
         this.juego.actualizar();
     }
+
+    private void ventanaDeFinalizacion(String mensaje){
+        BorderPane root = new BorderPane();
+        root.setPrefSize(300, 200);
+
+        Label mensajeLabel = new Label(mensaje);
+        mensajeLabel.setFont(Font.font(30));
+        BorderPane.setAlignment(mensajeLabel, Pos.CENTER);
+        root.setCenter(mensajeLabel);
+
+        Button aceptar = new Button("Aceptar");
+        aceptar.setOnAction(e -> {
+                e.consume();
+                this.volverAInicio();
+        });
+
+        HBox botonBox = new HBox(aceptar);
+        botonBox.setAlignment(Pos.BOTTOM_RIGHT);
+        botonBox.setPadding(new Insets(20, 30, 20, 20));
+
+        root.setBottom(botonBox);
+
+        Scene scene = new Scene(root, 250, 150);
+        this.stage.setScene(scene);
+    }
+
+    private void volverAInicio(){
+        VistaInicio inicio = new VistaInicio(this.stage);
+        inicio.cargarEscenario();
+    }
+
+
 }

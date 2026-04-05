@@ -44,7 +44,7 @@ public abstract class EnemigoDeTierra extends Enemigo {
     }
 
     @Override
-    public boolean llegoALaBase(){ return this.recorrido.size() >= this.indiceActual;}
+    public boolean llegoALaBase(){ return this.recorrido.size()-1 <= this.indiceActual;}
 
     public abstract TipoEnemigo getTipo();
 

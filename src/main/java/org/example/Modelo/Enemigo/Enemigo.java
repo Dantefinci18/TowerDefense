@@ -5,7 +5,7 @@ public abstract class Enemigo {
     private int vida;
     protected int velocidad;
     protected Direccion direccion;
-    private int danio;
+    private final int danio;
 
     public Enemigo(double x, double y, int vida, int velocidad,int danio){
         this.x = x;
@@ -21,6 +21,8 @@ public abstract class Enemigo {
     public double getX(){return this.x;}
 
     public double getY(){return this.y;}
+
+    public int getDanio(){return this.danio;}
 
     public abstract void avanzar();
 
