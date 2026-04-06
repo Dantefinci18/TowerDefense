@@ -3,7 +3,11 @@ package org.example.Vistas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import org.example.Modelo.Arma.EstadoArma;
+import org.example.Modelo.Arma.TipoArma;
 import org.example.Modelo.Celda.Base;
+import org.example.Modelo.Direccion;
+import org.example.Modelo.TowerDefense;
 import org.example.Repositorios.ImagenRotada;
 import org.example.Modelo.Arma.Arma;
 import org.example.Modelo.Celda.Celda;
@@ -16,6 +20,7 @@ public class VistaMapa extends VistaEntidades{
     private final Celda[][] mapa;
     private final RepositorioDeCeldas repositorioDeCeldas;
     private final RepositorioDeArmas repositorioDeArmas;
+    private static final int VIDA_INICIAL_BASE = 80;
 
     public VistaMapa(Celda[][] mapa){
         this.mapa = mapa;
@@ -28,8 +33,8 @@ public class VistaMapa extends VistaEntidades{
             for(int j = 0; j < mapa[0].length; j++){
                 Celda celda = mapa[i][j];
                 ImagenRotada imagen = this.repositorioDeCeldas.obtenerImagenCelda(celda.getTipo());
-                double x = j*TAMANIO_CELDA;
-                double y = i*TAMANIO_CELDA;
+                double x = j* TowerDefense.TAMANIO_CELDA;
+                double y = i*TowerDefense.TAMANIO_CELDA;
 
                 super.mostrarImagenRotada(gc,imagen,x,y);
 
@@ -41,8 +46,8 @@ public class VistaMapa extends VistaEntidades{
                 if(celda.getTipo() == TipoCelda.BASE){
                     Base base = (Base) celda;
                     int vida = base.getVida();
-                    double centrox = x + TAMANIO_CELDA/2.0;
-                    this.dibujarVidaBase(gc,centrox,y,vida);
+                    double centrox = x + TowerDefense.TAMANIO_CELDA/2.0;
+                    super.mostrarVida(gc,centrox,y,vida,VIDA_INICIAL_BASE);
                 }
 
             }
@@ -51,24 +56,12 @@ public class VistaMapa extends VistaEntidades{
 
     private void mostrarArma(GraphicsContext gc, Arma arma, double x, double y){
         if(arma !=null){
-            Image imagen = this.repositorioDeArmas.obtenerImagenArma(arma.getTipo(), arma.getNivel());
-            gc.drawImage(imagen, x, y, TAMANIO_CELDA, TAMANIO_CELDA);
+            TipoArma tipo = arma.getTipo();
+            EstadoArma estado = arma.getEstado();
+            Direccion direccion = arma.getDireccion();
+            int nivel = arma.getNivel();
+            ImagenRotada imagen = this.repositorioDeArmas.obtenerImagenArma(tipo,estado,direccion,nivel);
+            super.mostrarImagenRotada(gc,imagen,x,y);
         }
-    }
-
-    private void dibujarVidaBase(GraphicsContext gc, double x, double y, int vida) {
-
-        final double VIDA_MAXIMA = 80;
-        final double ANCHO_BARRA = 40;
-        final double ALTO_BARRA = 6;
-
-        double porcentaje = vida / VIDA_MAXIMA ;
-
-
-        gc.setFill(Color.BLACK);
-        gc.fillRect(x-ANCHO_BARRA/2.0, y, ANCHO_BARRA, ALTO_BARRA);
-
-        gc.setFill(Color.WHITE);
-        gc.fillRect(x-ANCHO_BARRA/2.0, y, ANCHO_BARRA* porcentaje , ALTO_BARRA);
     }
 }

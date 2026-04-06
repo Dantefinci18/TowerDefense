@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.example.Modelo.Arma.*;
+import org.example.Modelo.Direccion;
 import org.example.Modelo.TowerDefense;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
@@ -18,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.geometry.Insets;
+import org.example.Repositorios.ImagenRotada;
 import org.example.Repositorios.RepositorioDeArmas;
 
 
@@ -29,20 +31,19 @@ public class VistaJuego {
     private final Button botonMk2;
     private final Button botonMk3;
     private final Label labelDinero;
-    private Arma armaSelecionada;
-    private static final int TAMANIO_CELDA = 96;
+    private TipoArma armaSelecionada;
 
     public VistaJuego(Stage stage, String nivel){
         this.stage = stage;
         nivel = nivel.replace(" ", "");
         this.juego = new TowerDefense("Niveles/" + nivel + ".json");
-        int ancho = this.juego.obtenerAnchoDelMapa() * TAMANIO_CELDA;
-        int largo = this.juego.obtenerLargoDelMapa() * TAMANIO_CELDA;
+        int ancho = this.juego.obtenerAnchoDelMapa() * TowerDefense.TAMANIO_CELDA;
+        int largo = this.juego.obtenerLargoDelMapa() * TowerDefense.TAMANIO_CELDA;
         this.escenario = new VistaEscenario(this.juego,ancho,largo);
         RepositorioDeArmas repositorioDeArmas = new RepositorioDeArmas();
-        this.botonMk1 = crearBotonConImagenArma(new ArmaSimple());
-        this.botonMk2 = crearBotonConImagenArma(new ArmaRadial());
-        this.botonMk3 = crearBotonConImagenArma(new ArmaAerea());
+        this.botonMk1 = crearBotonConImagenArma(TipoArma.SIMPLE);
+        this.botonMk2 = crearBotonConImagenArma(TipoArma.RADIAL);
+        this.botonMk3 = crearBotonConImagenArma(TipoArma.AEREO);
         this.labelDinero = new Label();
     }
 
@@ -71,8 +72,8 @@ public class VistaJuego {
 
         this.escenario.setOnMouseClicked(e -> {
             if (this.armaSelecionada != null) {
-                int fila = (int) (e.getY() / TAMANIO_CELDA);
-                int columna = (int) (e.getX() / TAMANIO_CELDA);
+                int fila = (int) (e.getY() / TowerDefense.TAMANIO_CELDA);
+                int columna = (int) (e.getX() / TowerDefense.TAMANIO_CELDA);
                 this.juego.agregarArmaATorre(this.armaSelecionada,fila,columna);
                 this.armaSelecionada = null;
             }
@@ -124,9 +125,10 @@ public class VistaJuego {
         });
     }
 
-    private Button crearBotonConImagenArma(Arma arma) {
+    private Button crearBotonConImagenArma(TipoArma tipoArma) {
         RepositorioDeArmas repositorioDeArmas = new RepositorioDeArmas();
-        Image imagen = repositorioDeArmas.obtenerImagenArma(arma.getTipo(), 1);
+        ImagenRotada imagenRotada = repositorioDeArmas.obtenerImagenArma(tipoArma, EstadoArma.QUIETO,new Direccion(1,0),1);
+        Image imagen = imagenRotada.getImagen();
         Button boton = new Button();
         boton.setGraphic(new ImageView(imagen));
 
@@ -142,7 +144,7 @@ public class VistaJuego {
 
         boton.setBorder(new Border(borde));
         boton.setFocusTraversable(true);
-        boton.setOnAction(e -> this.armaSelecionada = arma);
+        boton.setOnAction(e -> this.armaSelecionada = tipoArma);
 
         return boton;
     }

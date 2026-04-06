@@ -1,6 +1,6 @@
 package org.example.Repositorios;
 
-import org.example.Modelo.Enemigo.Direccion;
+import org.example.Modelo.Direccion;
 import org.example.Modelo.Enemigo.TipoEnemigo;
 
 import java.util.HashMap;

@@ -5,7 +5,7 @@ import org.example.Modelo.Posicion;
 import java.util.ArrayList;
 
 public abstract class EnemigoDeTierra extends Enemigo {
-    private ArrayList<Posicion> recorrido;
+    private final ArrayList<Posicion> recorrido;
     private int indiceActual;
     private static final int TAMANIO_CELDA = 96;
 

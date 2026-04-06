@@ -1,4 +1,4 @@
-package org.example.Modelo.Enemigo;
+package org.example.Modelo;
 
 public class Direccion {
     private double dx;

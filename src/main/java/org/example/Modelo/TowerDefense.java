@@ -1,9 +1,6 @@
 package org.example.Modelo;
 
-import org.example.Modelo.Arma.Arma;
-import org.example.Modelo.Arma.ArmaAerea;
-import org.example.Modelo.Arma.ArmaRadial;
-import org.example.Modelo.Arma.ArmaSimple;
+import org.example.Modelo.Arma.*;
 import org.example.Modelo.Celda.Base;
 import org.example.Modelo.Celda.Celda;
 import org.example.Modelo.Celda.TipoCelda;
@@ -14,13 +11,14 @@ import org.example.Modelo.LogicaDeNiveles.NivelLoader;
 import java.util.*;
 
 public class TowerDefense {
-    private Posicion posicionBase;
-    private Posicion posicionSpawn;
-    private ArrayList<Posicion> camino;
-    private HashSet<Enemigo> enemigosVisibles;
+    private final Posicion posicionBase;
+    private final Posicion posicionSpawn;
+    private final ArrayList<Posicion> camino;
+    private final HashSet<Enemigo> enemigosVisibles;
     private ArrayDeque<TipoEnemigo> oleadaActual;
-    private ArrayDeque<ArrayDeque<TipoEnemigo>> oleadas;
+    private final ArrayDeque<ArrayDeque<TipoEnemigo>> oleadas;
     private final Celda[][] mapa;
+    private final HashSet<Torre> torres;
     private int dinero;
     private long tiempoDespuesDelSpawn;
     private boolean victoria;
@@ -28,7 +26,8 @@ public class TowerDefense {
     public static final int FPS = 60;
     public static final long MS_PER_FRAME = 1000 / FPS;
     private static final long TIEMPO_SPAWN_MS = 10 * 1000;
-    private static final long TAMANIO_CELDA = 96;
+    public static final int TAMANIO_CELDA = 96;
+    private static final int MONEDAS_POR_MUERTE = 50;
 
     public TowerDefense(String nivel){
         NivelLoader loader= new NivelLoader(nivel);
@@ -39,6 +38,7 @@ public class TowerDefense {
         this.oleadas = loader.getOleadas();
         this.oleadaActual = this.oleadas.poll();
         this.camino =new ArrayList<>(Arrays.asList(loader.getCamino()));
+        this.torres = loader.getTorres();
         this.dinero = DINERO_INICIAL;
         this.tiempoDespuesDelSpawn = 0;
         this.victoria = false;
@@ -58,35 +58,7 @@ public class TowerDefense {
         return enemigo;
     }
 
-    public Celda[][] getMapa(){return this.mapa;}
-
-    public int grtDinero(){return this.dinero;}
-
-    public boolean sePuedeComprarArmaSimple(){return this.dinero >= ArmaSimple.COSTO;}
-
-    public boolean sePuedeComprarArmaRadial(){return this.dinero >= ArmaRadial.COSTO;}
-
-    public boolean sePuedeComprarArmaAerea(){return this.dinero >= ArmaAerea.COSTO;}
-
-    public int obtenerLargoDelMapa(){
-        return this.mapa.length;
-    }
-
-    public int obtenerAnchoDelMapa(){
-        return this.mapa[0].length;
-    }
-
-    public void agregarArmaATorre(Arma arma, int fila, int columna){
-        Celda celda = mapa[fila][columna];
-        if(celda.getTipo() == TipoCelda.TORRE){
-            Torre torre = (Torre)celda;
-            if (torre.agregarArma(arma,this.dinero)){
-                this.dinero -= arma.getCosto();
-            }
-        }
-    }
-
-    public void actualizar() {
+    private void actualizarSpawn(){
         if(this.tiempoDespuesDelSpawn >= TIEMPO_SPAWN_MS){
             this.tiempoDespuesDelSpawn = 0;
 
@@ -107,19 +79,64 @@ public class TowerDefense {
         }
 
         this.tiempoDespuesDelSpawn += MS_PER_FRAME;
+    }
 
+    private void moverEnemigos(){
         Iterator<Enemigo> it = this.enemigosVisibles.iterator();
 
         while (it.hasNext()) {
             Enemigo enemigo = it.next();
             enemigo.avanzar();
 
-            if (enemigo.llegoALaBase()) {
+            if(enemigo.estaDestruido()){
+                it.remove();
+                this.dinero += MONEDAS_POR_MUERTE;
+            }else if (enemigo.llegoALaBase()) {
                 Base base = (Base) this.mapa[this.posicionBase.getFila()][this.posicionBase.getColumna()];
                 base.recibirDanio(enemigo.getDanio());
                 it.remove();
             }
         }
+    }
+
+    private void dispararTorres(){
+        for(Torre torre: this.torres){
+            torre.disparar(this.enemigosVisibles);
+        }
+    }
+
+    public Celda[][] getMapa(){return this.mapa;}
+
+    public int grtDinero(){return this.dinero;}
+
+    public boolean sePuedeComprarArmaSimple(){return this.dinero >= TipoArma.SIMPLE.getCosto();}
+
+    public boolean sePuedeComprarArmaRadial(){return this.dinero >= TipoArma.RADIAL.getCosto();}
+
+    public boolean sePuedeComprarArmaAerea(){return this.dinero >= TipoArma.AEREO.getCosto();}
+
+    public int obtenerLargoDelMapa(){
+        return this.mapa.length;
+    }
+
+    public int obtenerAnchoDelMapa(){
+        return this.mapa[0].length;
+    }
+
+    public void agregarArmaATorre(TipoArma tipoArma, int fila, int columna){
+        Celda celda = mapa[fila][columna];
+        if(celda.getTipo() == TipoCelda.TORRE){
+            Torre torre = (Torre)celda;
+            if (torre.agregarArma(tipoArma,this.dinero)){
+                this.dinero -= tipoArma.getCosto();
+            }
+        }
+    }
+
+    public void actualizar() {
+        this.actualizarSpawn();
+        this.moverEnemigos();
+        this.dispararTorres();
     }
 
     public HashSet<Enemigo> obtenerEnemigos(){ return this.enemigosVisibles;}

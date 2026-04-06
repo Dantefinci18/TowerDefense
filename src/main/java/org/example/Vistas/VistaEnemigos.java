@@ -1,9 +1,10 @@
 package org.example.Vistas;
 
 import javafx.scene.canvas.GraphicsContext;
-import org.example.Modelo.Enemigo.Direccion;
+import org.example.Modelo.Direccion;
 import org.example.Modelo.Enemigo.Enemigo;
 import org.example.Modelo.Enemigo.TipoEnemigo;
+import org.example.Modelo.TowerDefense;
 import org.example.Repositorios.ImagenRotada;
 import org.example.Repositorios.RepositorioDeEnemigos;
 import java.util.HashSet;
@@ -27,6 +28,10 @@ public class VistaEnemigos extends VistaEntidades{
             double y = enemigo.getY();
 
             super.mostrarImagenRotada(gc,imagen,x,y);
+            double x_centrado = x + TowerDefense.TAMANIO_CELDA/2.0;
+            int vidaActual = enemigo.getVidaActual();
+            int vidaInicial = enemigo.getVidaInicial();
+            super.mostrarVida(gc,x_centrado,y,vidaActual,vidaInicial);
         }
     }
 }

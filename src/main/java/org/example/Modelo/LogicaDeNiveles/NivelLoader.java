@@ -21,6 +21,7 @@ public class NivelLoader {
     private final Celda[][] mapa;
     private Posicion posicionBase;
     private final NivelDTO nivelDto;
+    private final HashSet<Torre> torres;
 
     public NivelLoader(String nivel) {
 
@@ -28,7 +29,7 @@ public class NivelLoader {
         Gson gson = new Gson();
         this.nivelDto = gson.fromJson(new InputStreamReader(Objects.requireNonNull(input)), NivelDTO.class);
         TipoCeldaDTO[][] mapaDto = this.nivelDto.getMapa();
-
+        this.torres = new HashSet<>();
         this.mapa = new Celda[mapaDto.length][mapaDto[0].length];
 
         for (int i = 0; i < mapaDto.length; i++) {
@@ -45,7 +46,13 @@ public class NivelLoader {
                     case ABI -> this.mapa[i][j] = new Celda(TipoCelda.CURVA_ABAJO_IZQUIERDA);
                     case ARD -> this.mapa[i][j] = new Celda(TipoCelda.CURVA_ARRIBA_DERECHA);
                     case ARI -> this.mapa[i][j] = new Celda(TipoCelda.CURVA_ARRIBA_IZQUIERDA);
-                    case T -> this.mapa[i][j] = new Torre();
+
+                    case T -> {
+                        Torre torre = new Torre(i,j);
+                        this.mapa[i][j] = torre;
+                        this.torres.add(torre);
+                    }
+
                     case O -> this.mapa[i][j] = new Celda(TipoCelda.VACIO);
                 }
             }
@@ -72,4 +79,6 @@ public class NivelLoader {
     }
 
     public Posicion[] getCamino(){return this.nivelDto.getCamino();}
+
+    public HashSet<Torre> getTorres(){return this.torres;}
 }
